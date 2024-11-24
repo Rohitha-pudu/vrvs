@@ -1,13 +1,14 @@
 import React, { useContext, useState } from 'react';
 import { RBACContext } from '../../context/RBACContext';
-import { FaTrash } from 'react-icons/fa'; // Icon for delete action
+import { FaTrash } from 'react-icons/fa';
 
 const RoleList = () => {
   const { roles, addRole, deleteRole } = useContext(RBACContext);
   const [isAddRoleFormVisible, setIsAddRoleFormVisible] = useState(false);
   const [newRole, setNewRole] = useState({ name: '', permissions: [] });
-  const [isOtherSelected, setIsOtherSelected] = useState(false); // State for "Other"
+  const [isOtherSelected, setIsOtherSelected] = useState(false);
   const [customPermission, setCustomPermission] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const permissionOptions = ['Read', 'Write', 'Read and Write'];
 
@@ -20,9 +21,19 @@ const RoleList = () => {
       addRole({ ...newRole, permissions });
       setNewRole({ name: '', permissions: [] });
       setCustomPermission('');
-      setIsOtherSelected(false); // Reset "Other" state
+      setIsOtherSelected(false);
       setIsAddRoleFormVisible(false);
+
+     
+      setSuccessMessage('Role added successfully!');
+      setTimeout(() => setSuccessMessage(''), 3000); 
     }
+  };
+
+  const handleDeleteRole = (roleId) => {
+    deleteRole(roleId);
+    setSuccessMessage('Role deleted successfully!');
+    setTimeout(() => setSuccessMessage(''), 3000); 
   };
 
   const handlePermissionChange = (permission) => {
@@ -34,7 +45,13 @@ const RoleList = () => {
 
   return (
     <div className="p-4 sm:p-6 lg:p-8 relative">
-      {/* Add Role Button */}
+      {successMessage && (
+        <div className="bg-black text-white px-4 py-2 rounded-lg mt-4 text-center">
+          {successMessage}
+        </div>
+      )}
+
+      
       <div className="absolute top-0 right-4">
         <button
           onClick={() => setIsAddRoleFormVisible(true)}
@@ -45,7 +62,7 @@ const RoleList = () => {
       </div>
   
       {/* Roles Table */}
-      <div className="overflow-x-auto mt-8"> {/* Add some margin to avoid overlap */}
+      <div className="overflow-x-auto mt-8"> 
         <table className="min-w-full table-auto bg-white shadow-lg rounded-lg">
           <thead className="bg-gradient-to-r from-green-400 to-blue-500 text-white">
             <tr>
@@ -63,7 +80,7 @@ const RoleList = () => {
                 </td>
                 <td className="border-b border-gray-200 p-4 text-sm text-gray-800">
                   <button
-                    onClick={() => deleteRole(role.id)}
+                    onClick={() => handleDeleteRole(role.id)}
                     className="text-red-600 hover:text-red-800"
                     title="Delete Role"
                   >
@@ -76,7 +93,7 @@ const RoleList = () => {
         </table>
       </div>
   
-      {/* Add Role Form */}
+      {/* Role Form */}
       {isAddRoleFormVisible && (
         <div className="mt-6 bg-white p-4 sm:p-6 rounded-lg shadow-lg">
           <h2 className="text-xl font-semibold mb-4">Add New Role</h2>
@@ -155,7 +172,6 @@ const RoleList = () => {
       )}
     </div>
   );
-  
 };
 
 export default RoleList;

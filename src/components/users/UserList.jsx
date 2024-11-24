@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { RBACContext } from '../../context/RBACContext';
 import { formatDistanceToNow } from 'date-fns';
-import { FaClock, FaEdit, FaTrash, FaTimes } from 'react-icons/fa';
+import { FaClock, FaEdit, FaTrash, FaTimes, FaSearch } from 'react-icons/fa';
 
 const UserList = () => {
   const { users, deleteUser, updateUser } = useContext(RBACContext);
@@ -10,6 +10,14 @@ const UserList = () => {
   const [isDeleting, setIsDeleting] = useState(false);
   const [userToDelete, setUserToDelete] = useState(null);
 
+  // Search and filter states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedRole, setSelectedRole] = useState('All');
+  const [selectedStatus, setSelectedStatus] = useState('All');
+
+  const [sortBy, setSortBy] = useState('name');
+  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
+
   const handleEditClick = (user) => {
     setEditingUser(user);
     setIsEditing(true);
@@ -17,7 +25,6 @@ const UserList = () => {
 
   const handleUpdateUser = (e) => {
     e.preventDefault();
-
     const updatedUser = {
       ...editingUser,
       name: e.target.name.value,
@@ -46,6 +53,40 @@ const UserList = () => {
     setIsDeleting(false);
     setUserToDelete(null);
   };
+
+  // Handle search input change
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  // Filter users by role and status
+  const filteredUsers = users
+    .filter((user) => {
+      return (
+        (user.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email.toLowerCase().includes(searchTerm.toLowerCase())) &&
+        (selectedRole === 'All' || user.role === selectedRole) &&
+        (selectedStatus === 'All' || user.status === selectedStatus)
+      );
+    })
+    .sort((a, b) => {
+      if (sortBy === 'name') {
+        return sortOrder === 'asc'
+          ? a.name.localeCompare(b.name)
+          : b.name.localeCompare(a.name);
+      }
+      if (sortBy === 'role') {
+        return sortOrder === 'asc'
+          ? a.role.localeCompare(b.role)
+          : b.role.localeCompare(a.role);
+      }
+      if (sortBy === 'lastActivity') {
+        return sortOrder === 'asc'
+          ? new Date(a.lastActivity) - new Date(b.lastActivity)
+          : new Date(b.lastActivity) - new Date(a.lastActivity);
+      }
+      return 0;
+    });
 
   return (
     <div className="p-4 sm:p-6">
@@ -109,111 +150,149 @@ const UserList = () => {
           </div>
         </form>
       ) : (
-        <div className="overflow-x-auto">
-          <table className="w-full table-auto border-collapse bg-gradient-to-r from-blue-50 to-green-50 shadow-lg rounded-lg overflow-hidden">
-            <thead className="bg-gradient-to-r from-blue-100 to-green-100">
-              <tr>
-                <th className="border-b border-gray-300 text-left px-4 py-2 text-sm font-bold text-gray-800">
-                  Account
-                </th>
-                <th className="border-b border-gray-300 text-left px-4 py-2 text-sm font-bold text-gray-800">
-                  Role
-                </th>
-                <th className="border-b border-gray-300 text-left px-4 py-2 text-sm font-bold text-gray-800">
-                  Email
-                </th>
-                <th className="border-b border-gray-300 text-left px-4 py-2 text-sm font-bold text-gray-800">
-                  Status
-                </th>
-                <th className="border-b border-gray-300 px-4 py-2 text-sm font-bold text-gray-800">
-                  Last Activity
-                </th>
-                <th className="border-b border-gray-300 px-4 py-2 text-sm font-bold text-gray-800">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map((user) => {
-                const lastActivity = new Date(user.lastActivity);
-                const timeAgo = !isNaN(lastActivity.getTime())
-                  ? formatDistanceToNow(lastActivity)
-                  : 'N/A';
-
-                return (
-                  <tr
-                    key={user.id}
-                    className="hover:bg-gradient-to-r from-blue-50 to-green-50 transition-all duration-300"
-                  >
-                    <td className="border-b border-gray-300 px-4 py-2 text-sm text-gray-800">
-                      {user.name}
-                    </td>
-                    <td className="border-b border-gray-300 px-4 py-2 text-sm text-gray-800">
-                      {user.role}
-                    </td>
-                    <td className="border-b border-gray-300 px-4 py-2 text-sm text-gray-800">
-                      {user.email}
-                    </td>
-                    <td className="border-b border-gray-300 px-4 py-2 text-sm text-gray-800">
-                      {user.status}
-                    </td>
-                    <td className="border-b border-gray-300 px-4 py-2 text-sm text-gray-800">
-                      <div className="flex items-center gap-2">
-                        <FaClock className="text-gray-500 text-xs" />
-                        <span className="text-gray-500 text-xs">{timeAgo} ago</span>
-                      </div>
-                    </td>
-                    <td className="border-b border-gray-300 px-4 py-2 flex gap-4 items-center justify-end">
-                      <button
-                        className="text-yellow-600 hover:text-yellow-700 transition-colors"
-                        onClick={() => handleEditClick(user)}
-                        title="Edit User"
-                      >
-                        <FaEdit size={18} />
-                      </button>
-                      <button
-                        className="text-red-600 hover:text-red-700 transition-colors"
-                        onClick={() => handleDeleteClick(user)}
-                        title="Delete User"
-                      >
-                        <FaTrash size={18} />
-                      </button>
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        </div>
-      )}
-
-      {isDeleting && (
-        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white p-4 sm:p-6 rounded-lg shadow-lg w-11/12 max-w-md">
-            <div className="flex items-center justify-between">
-              <h3 className="text-xl font-semibold">Are you sure?</h3>
-              <button onClick={cancelDelete}>
-                <FaTimes size={18} className="text-gray-500 hover:text-gray-700" />
-              </button>
+        <div>
+          <div className="flex justify-between items-center mb-4">
+            <div className="flex items-center gap-2">
+              <FaSearch />
+              <input
+                type="text"
+                placeholder="Search by name or email"
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className="border border-gray-300 p-2 rounded w-80"
+              />
             </div>
-            <p className="mt-4 text-sm text-gray-600">
-              Do you really want to delete the user {userToDelete?.name}?
-            </p>
-            <div className="flex justify-end gap-4 mt-4">
-              <button
-                onClick={cancelDelete}
-                className="bg-gray-500 text-white px-4 py-2 rounded"
+
+            <div className="flex gap-4">
+              <select
+                value={selectedRole}
+                onChange={(e) => setSelectedRole(e.target.value)}
+                className="bg-gray-700 text-white border border-black p-2 rounded"
               >
-                Cancel
-              </button>
-              <button
-                onClick={confirmDelete}
-                className="bg-red-500 text-white px-4 py-2 rounded"
+                <option value="All">All Roles</option>
+                <option value="Admin">Admin</option>
+                <option value="Editor">Editor</option>
+              </select>
+
+              <select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+                className="bg-gray-700 text-white border border-gray-300 p-2 rounded"
               >
-                Confirm Delete
+                <option value="All">All Status</option>
+                <option value="Active">Active</option>
+                <option value="Inactive">Inactive</option>
+              </select>
+
+              <select
+                value={sortBy}
+                onChange={(e) => setSortBy(e.target.value)}
+                className="bg-gray-700 text-white border border-gray-300 p-2 rounded"
+              >
+                <option value="name">Sort by Name</option>
+                <option value="role">Sort by Role</option>
+                <option value="lastActivity">Sort by Last Activity</option>
+              </select>
+
+              <button
+                onClick={() =>
+                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
+                }
+                className="border border-gray-300 p-2 rounded"
+              >
+                {sortOrder === 'asc' ? '↑' : '↓'}
               </button>
             </div>
           </div>
+
+          <div className="overflow-x-auto">
+            <table className="w-full table-auto border-collapse bg-gradient-to-r from-blue-50 to-green-50 shadow-lg rounded-lg overflow-hidden">
+              <thead className="bg-gradient-to-r from-blue-100 to-green-100">
+                <tr>
+                  <th className="border-b border-gray-300 text-left px-4 py-2 text-sm font-bold text-gray-800">
+                    Account
+                  </th>
+                  <th className="border-b border-gray-300 text-left px-4 py-2 text-sm font-bold text-gray-800">
+                    Role
+                  </th>
+                  <th className="border-b border-gray-300 text-left px-4 py-2 text-sm font-bold text-gray-800">
+                    Email
+                  </th>
+                  <th className="border-b border-gray-300 text-left px-4 py-2 text-sm font-bold text-gray-800">
+                    Status
+                  </th>
+                  <th className="border-b border-gray-300 px-4 py-2 text-sm font-bold text-gray-800">
+                    Last Activity
+                  </th>
+                  <th className="border-b border-gray-300 px-4 py-2 text-sm font-bold text-gray-800">
+                    Actions
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredUsers.map((user) => {
+                  const lastActivity = new Date(user.lastActivity);
+                  const timeAgo = !isNaN(lastActivity.getTime())
+                    ? formatDistanceToNow(lastActivity)
+                    : 'N/A';
+
+                  return (
+                    <tr
+                      key={user.id}
+                      className="hover:bg-gradient-to-r from-blue-50 to-green-50"
+                    >
+                      <td className="border-b border-gray-300 px-4 py-2">{user.name}</td>
+                      <td className="border-b border-gray-300 px-4 py-2">{user.role}</td>
+                      <td className="border-b border-gray-300 px-4 py-2">{user.email}</td>
+                      <td className="border-b border-gray-300 px-4 py-2">{user.status}</td>
+                      <td className="border-b border-gray-300 px-4 py-2">{timeAgo}</td>
+                      <td className="border-b border-gray-300 px-4 py-2">
+                        <div className="flex gap-2">
+                          <button
+                            onClick={() => handleEditClick(user)}
+                            className="text-blue-500 hover:text-blue-700"
+                          >
+                            <FaEdit />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteClick(user)}
+                            className="text-red-500 hover:text-red-700"
+                          >
+                            <FaTrash />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          {isDeleting && userToDelete && (
+            <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
+              <div className="bg-white p-4 rounded-lg shadow-lg max-w-md mx-auto">
+                <h2 className="text-lg font-semibold text-gray-800">Confirm Deletion</h2>
+                <p className="text-gray-700">
+                  Are you sure you want to delete {userToDelete.name}?
+                </p>
+                <div className="mt-4 flex justify-between">
+                  <button
+                    onClick={confirmDelete}
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                  >
+                    Yes, Delete
+                  </button>
+                  <button
+                    onClick={cancelDelete}
+                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

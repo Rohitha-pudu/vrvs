@@ -20,7 +20,7 @@ export const RBACProvider = ({ children }) => {
     setUsers(
       users.map((user) =>
         user.id === id
-          ? { ...user, ...updatedUser } // Merge the updated user data while keeping other fields intact
+          ? { ...user, ...updatedUser } 
           : user
       )
     );
@@ -28,8 +28,6 @@ export const RBACProvider = ({ children }) => {
   const deleteUser = (id) => setUsers(users.filter((user) => user.id !== id));
 
   const addRole = (role) => setRoles([...roles, role]);
-  // const updateRole = (id, updatedRole) =>
-  //   setRoles(roles.map((role) => (role.id === id ? updatedRole : role)));
   const deleteRole = (id) => setRoles(roles.filter((role) => role.id !== id));
 
   return (

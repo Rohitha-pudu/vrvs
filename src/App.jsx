@@ -5,8 +5,6 @@ import { RBACProvider } from './context/RBACContext';
 import Dashboard from './pages/Dashboard';
 
 const App = () => {
-  
-console.log(RBACProvider); // If this logs `undefined`, the import failed
   return (
     <RBACProvider>
       <Router>
@@ -14,16 +12,16 @@ console.log(RBACProvider); // If this logs `undefined`, the import failed
           <header className="bg-black text-white p-4">
             <h1 className="text-center text-xl font-bold">RBAC System</h1>
             <ToastContainer
-        position="top-center" // Positioning to top-center
-        autoClose={3000} // Auto close after 3 seconds
-        hideProgressBar={true} // Hide progress bar
-        newestOnTop={false} // Toasts show in the order they are triggered
-        closeOnClick={true} // Toast closes when clicked
-        rtl={false} // Right to left support
-        pauseOnFocusLoss={false} // Do not pause on focus loss
-        draggable={false} // Disable dragging
-        pauseOnHover={false} // Do not pause when hovering
-        theme="dark" // You can use 'light' or 'dark'
+        position="top-center"
+        autoClose={3000}
+        hideProgressBar={true} 
+        newestOnTop={false} 
+        closeOnClick={true} 
+        rtl={false}
+        pauseOnFocusLoss={false}
+        draggable={false}
+        pauseOnHover={false}
+        theme="dark"
       />
           </header>
           <main className="p-6">

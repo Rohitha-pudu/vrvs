@@ -10,37 +10,68 @@ const UserForm = ({ onClose, initialData }) => {
     name: '',
     role: '',
     email: '',
-    status: 'Active'
+    status: 'Active',
   });
 
-  // Set initial data for editing if available
+  const [errors, setErrors] = useState({});
+
   useEffect(() => {
     if (initialData) {
-      setFormData(initialData); // Prefill form data if editing
+      setFormData(initialData);
     }
   }, [initialData]);
+
+  const validate = () => {
+    const newErrors = {};
+
+    
+    if (!formData.name.trim()) {
+      newErrors.name = 'Name is required.';
+    } else if (formData.name.trim().length < 3) {
+      newErrors.name = 'Name must be at least 3 characters long.';
+    }
+
+    
+    if (!formData.role.trim()) {
+      newErrors.role = 'Role is required.';
+    }
+
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!formData.email.trim()) {
+      newErrors.email = 'Email is required.';
+    } else if (!emailRegex.test(formData.email.trim())) {
+      newErrors.email = 'Enter a valid email address.';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+    if (errors[name]) {
+      
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!formData.name || !formData.role || !formData.email) {
-      alert('Please fill in all the fields');
-      return;
-    }
 
-    // Check if we are updating or adding
-    if (formData.id) {
-      updateUser(formData.id, formData); // Update user if ID is available
-      toast.success('User updated successfully!'); // Toast notification for update
+    if (validate()) {
+      if (formData.id) {
+        updateUser(formData.id, formData);
+        toast.success('User updated successfully!');
+      } else {
+        addUser(formData);
+        toast.success('User added successfully!');
+      }
+      onClose();
     } else {
-      addUser(formData); // Add new user if no ID is present
-      toast.success('User added successfully!'); // Toast notification for add
+      toast.error('Please fix the errors in the form.');
     }
-    onClose(); // Close form after submission
   };
 
   return (
@@ -49,7 +80,6 @@ const UserForm = ({ onClose, initialData }) => {
         {formData.id ? 'Edit User' : 'Add User'}
       </h3>
       <form onSubmit={handleSubmit}>
-        {/* Name Input */}
         <div className="mb-4">
           <label htmlFor="name" className="block text-sm font-medium text-gray-600">
             Name
@@ -60,12 +90,13 @@ const UserForm = ({ onClose, initialData }) => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className="w-full p-3 mt-2 border-2 border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            required
+            className={`w-full p-3 mt-2 border-2 rounded-lg focus:ring-blue-500 focus:border-blue-500 ${
+              errors.name ? 'border-red-500' : 'border-gray-300'
+            }`}
           />
+          {errors.name && <p className="text-sm text-red-500 mt-1">{errors.name}</p>}
         </div>
 
-        {/* Role Input */}
         <div className="mb-4">
           <label htmlFor="role" className="block text-sm font-medium text-gray-600">
             Role
@@ -76,12 +107,14 @@ const UserForm = ({ onClose, initialData }) => {
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className="w-full p-3 mt-2 border-2 border-gray-400 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            required
+            className={`w-full p-3 mt-2 border-2 rounded-lg focus:ring-blue-500 focus:border-blue-500 ${
+              errors.role ? 'border-red-500' : 'border-gray-300'
+            }`}
           />
+          {errors.role && <p className="text-sm text-red-500 mt-1">{errors.role}</p>}
         </div>
 
-        {/* Email Input */}
+        
         <div className="mb-4">
           <label htmlFor="email" className="block text-sm font-medium text-gray-600">
             Email
@@ -92,12 +125,14 @@ const UserForm = ({ onClose, initialData }) => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className="w-full p-3 mt-2 border-2 border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-            required
+            className={`w-full p-3 mt-2 border-2 rounded-lg focus:ring-blue-500 focus:border-blue-500 ${
+              errors.email ? 'border-red-500' : 'border-gray-300'
+            }`}
           />
+          {errors.email && <p className="text-sm text-red-500 mt-1">{errors.email}</p>}
         </div>
 
-        {/* Status Select */}
+      
         <div className="mb-6">
           <label htmlFor="status" className="block text-sm font-medium text-gray-600">
             Status
@@ -114,7 +149,7 @@ const UserForm = ({ onClose, initialData }) => {
           </select>
         </div>
 
-        {/* Action Buttons */}
+        
         <div className="flex justify-end gap-4">
           <button
             type="button"
