@@ -9,7 +9,7 @@ The **Role and User Management System** enables administrators to manage users a
 ### **1. Role Management**
    - **Add Role**: You can create new roles with a name and assign permissions to each role (such as Read, Write, and Custom Permissions).
    - **Delete Role**: Roles can be deleted, and confirmation is required before deletion.
-   - **View Permissions**: Each role has a list of associated permissions, which can be updated as needed.
+   - **View Permissions**: Each role has a list of associated permissions.
 
 ### **2. User Management**
    - **Add User**: You can add a new user by providing their name, email, and assigning them one or more roles.
