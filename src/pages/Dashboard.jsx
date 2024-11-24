@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import UserList from '../components/users/UserList';
 import UserForm from '../components/users/UserForm';
 import RoleList from '../components/roles/RoleList';
-import RoleForm from '../components/roles/RoleForm';
+
 
 const Dashboard = () => {
   const [showUserForm, setShowUserForm] = useState(false);
@@ -41,19 +41,7 @@ const Dashboard = () => {
 
         {/* Role Section */}
         <div className="col-span-1 sm:col-span-2 lg:col-span-1 bg-white shadow-lg rounded-lg p-6 border border-gray-200 hover:shadow-xl transition-all duration-300">
-          <div className="flex justify-end items-center mb-4">
-            <button
-              onClick={() => setShowRoleForm(!showRoleForm)}
-              className="w-full sm:w-auto bg-teal-700 text-white px-4 py-2 rounded-lg hover:bg-teal-700 transition-all"
-            >
-              Add Role
-            </button>
-          </div>
-          {showRoleForm ? (
-            <RoleForm onClose={() => setShowRoleForm(false)} />
-          ) : (
             <RoleList />
-          )}
         </div>
       </div>
     </div>
