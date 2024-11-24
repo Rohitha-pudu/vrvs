@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Dashboard from './pages/DashBoard';
 import { ToastContainer } from 'react-toastify';
 import { RBACProvider } from './context/RBACContext';
+import Dashboard from './pages/Dashboard';
 
 const App = () => {
   
