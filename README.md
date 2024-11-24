@@ -1,4 +1,4 @@
-# **Role and User Management System**
+# **Role Based Access Control**
 
 ## **Project Overview**
 
@@ -69,11 +69,3 @@ The **Role and User Management System** enables administrators to manage users a
 - **JavaScript (ES6+)**: Modern JavaScript features for a clean and efficient codebase.
 
 ---
-
-## **Setup Instructions**
-
-To set up the project locally, follow these steps:
-
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-repo/role-and-user-management-system.git
