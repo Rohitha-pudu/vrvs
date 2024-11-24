@@ -90,8 +90,11 @@ const UserList = () => {
   // Role styles
   const roleStyles = {
     Admin: 'bg-blue-500 text-white px-3 py-1 rounded-full text-xs',
+    admin: 'bg-blue-500 text-white px-3 py-1 rounded-full text-xs',
     Editor: 'bg-green-500 text-white px-3 py-1 rounded-full text-xs',
+    editor: 'bg-green-500 text-white px-3 py-1 rounded-full text-xs',
     Viewer: 'bg-yellow-500 text-white px-3 py-1 rounded-full text-xs',
+    viewer: 'bg-yellow-500 text-white px-3 py-1 rounded-full text-xs',
   };
 
   return (
@@ -248,7 +251,13 @@ const UserList = () => {
                 ) : (
                   filteredUsers.map((user) => (
                     <tr key={user.id}>
-                      <td className="border-b border-gray-300 px-4 py-2">{user.name}</td>
+                      <td className="border-b border-gray-300 px-4 py-2 flex items-center gap-2">
+                      <img
+                      src={user.imageUrl || 'https://i.pinimg.com/474x/47/3e/84/473e84e35274f087695236414ff8df3b.jpg'} 
+                      alt='Img'
+                      className="w-8 h-8 rounded-full object-cover"
+                    />
+                        {user.name}</td>
                       <td className="border-b border-gray-300 px-4 py-2">
                         <span className={roleStyles[user.role]}>{user.role}</span>
                       </td>
@@ -256,7 +265,7 @@ const UserList = () => {
                       <td className="border-b border-gray-200 px-4 py-2 text-sm">
                         <span
                           className={`inline-block w-2 h-6 rounded ${
-                            user.status === 'Invite Pending'
+                            user.status === '' || user.status === 'Invite Pending'
                               ? 'border-l-4 border-yellow-500'
                               : user.status === 'Invite Expired'
                               ? 'border-l-4 border-gray-500'
@@ -265,7 +274,7 @@ const UserList = () => {
                               : ''
                           }`}
                         />
-                        {user.status}
+                        {user.status?`${user.status}`:'Invite Pending'}
                       </td>
 
                       <td className="border-b border-gray-300 px-4 py-2">

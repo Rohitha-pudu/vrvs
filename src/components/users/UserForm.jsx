@@ -10,7 +10,7 @@ const UserForm = ({ onClose, initialData }) => {
     name: '',
     role: '',
     email: '',
-    status: 'Active',
+    status: '',
   });
 
   const [errors, setErrors] = useState({});
