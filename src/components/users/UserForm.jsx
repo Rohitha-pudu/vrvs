@@ -133,21 +133,7 @@ const UserForm = ({ onClose, initialData }) => {
         </div>
 
       
-        <div className="mb-6">
-          <label htmlFor="status" className="block text-sm font-medium text-gray-600">
-            Status
-          </label>
-          <select
-            id="status"
-            name="status"
-            value={formData.status}
-            onChange={handleChange}
-            className="w-full p-3 mt-2 border-2 border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-          >
-            <option value="Active">Active</option>
-            <option value="Inactive">Inactive</option>
-          </select>
-        </div>
+         
 
         
         <div className="flex justify-end gap-4">

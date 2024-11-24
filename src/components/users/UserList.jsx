@@ -1,7 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { RBACContext } from '../../context/RBACContext';
 import { formatDistanceToNow } from 'date-fns';
-import { FaClock, FaEdit, FaTrash, FaTimes, FaSearch } from 'react-icons/fa';
+import { FaClock, FaEdit, FaTrash, FaSearch } from 'react-icons/fa';
 
 const UserList = () => {
   const { users, deleteUser, updateUser } = useContext(RBACContext);
@@ -14,7 +14,6 @@ const UserList = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedRole, setSelectedRole] = useState('All');
   const [selectedStatus, setSelectedStatus] = useState('All');
-
   const [sortBy, setSortBy] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc'); // 'asc' or 'desc'
 
@@ -88,6 +87,13 @@ const UserList = () => {
       return 0;
     });
 
+  // Role styles
+  const roleStyles = {
+    Admin: 'bg-blue-500 text-white px-3 py-1 rounded-full text-xs',
+    Editor: 'bg-green-500 text-white px-3 py-1 rounded-full text-xs',
+    Viewer: 'bg-yellow-500 text-white px-3 py-1 rounded-full text-xs',
+  };
+
   return (
     <div className="p-4 sm:p-6">
       {isEditing ? (
@@ -114,6 +120,7 @@ const UserList = () => {
             >
               <option value="Admin">Admin</option>
               <option value="Editor">Editor</option>
+              <option value="Viewer">Viewer</option>
             </select>
           </div>
           <div className="flex flex-col gap-2">
@@ -123,8 +130,8 @@ const UserList = () => {
               defaultValue={editingUser.status}
               className="border border-gray-300 p-2 rounded"
             >
-              <option value="Active">Active</option>
-              <option value="Inactive">Inactive</option>
+              <option value="Active">Invite Expired</option>
+              <option value="Inactive">Invite Pending</option>
             </select>
           </div>
           <div className="flex flex-col gap-2">
@@ -172,6 +179,7 @@ const UserList = () => {
                 <option value="All">All Roles</option>
                 <option value="Admin">Admin</option>
                 <option value="Editor">Editor</option>
+                <option value="Viewer">Viewer</option>
               </select>
 
               <select
@@ -180,8 +188,9 @@ const UserList = () => {
                 className="bg-gray-700 text-white border border-gray-300 p-2 rounded mb-2 sm:mb-0 w-full sm:w-auto"
               >
                 <option value="All">All Status</option>
-                <option value="Active">Active</option>
-                <option value="Inactive">Inactive</option>
+                <option value="Active">Invite Pending </option>
+                <option value="Inactive">Invite Expired</option>
+                <option value="Accepted">Invite Accepted</option>
               </select>
 
               <select
@@ -221,80 +230,92 @@ const UserList = () => {
                   <th className="border-b border-gray-300 text-left px-4 py-2 text-sm font-bold text-gray-800">
                     Status
                   </th>
-                  <th className="border-b border-gray-300 px-4 py-2 text-sm font-bold text-gray-800">
+                  <th className="border-b border-gray-300 text-left px-4 py-2 text-sm font-bold text-gray-800">
                     Last Activity
                   </th>
-                  <th className="border-b border-gray-300 px-4 py-2 text-sm font-bold text-gray-800">
+                  <th className="border-b border-gray-300 text-left px-4 py-2 text-sm font-bold text-gray-800">
                     Actions
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map((user) => (
-                  <tr key={user.id}>
-                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
-                      {user.name}
+                {filteredUsers.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="text-center py-4 text-gray-500">
+                      No users found
                     </td>
-                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
-                      {user.role}
-                    </td>
-                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
-                      {user.email}
-                    </td>
-                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
-                      {user.status}
-                    </td>
-                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
-                      <div className="flex items-center gap-2">
-                        <FaClock />
-                        {formatDistanceToNow(new Date(user.lastActivity), {
-                          addSuffix: true,
-                        })}
-                      </div>
-                    </td>
-                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
-                      <div className="flex items-center gap-2">
+                  </tr>
+                ) : (
+                  filteredUsers.map((user) => (
+                    <tr key={user.id}>
+                      <td className="border-b border-gray-300 px-4 py-2">{user.name}</td>
+                      <td className="border-b border-gray-300 px-4 py-2">
+                        <span className={roleStyles[user.role]}>{user.role}</span>
+                      </td>
+                      <td className="border-b border-gray-300 px-4 py-2">{user.email}</td>
+                      <td className="border-b border-gray-200 px-4 py-2 text-sm">
+                        <span
+                          className={`inline-block w-2 h-6 rounded ${
+                            user.status === 'Invite Pending'
+                              ? 'border-l-4 border-yellow-500'
+                              : user.status === 'Invite Expired'
+                              ? 'border-l-4 border-gray-500'
+                              : user.status === 'Invite Accepted'
+                              ? 'border-l-4 border-green-500'
+                              : ''
+                          }`}
+                        />
+                        {user.status}
+                      </td>
+
+                      <td className="border-b border-gray-300 px-4 py-2">
+                        <span className="text-gray-600">
+                          5 days ago
+                        </span>
+                      </td>
+                      <td className="border-b border-gray-300 px-4 py-2">
                         <button
                           onClick={() => handleEditClick(user)}
-                          className="bg-blue-500 text-white p-2 rounded"
+                          className="bg-green-500 text-white px-4 py-2 rounded mr-2"
                         >
                           <FaEdit />
                         </button>
                         <button
                           onClick={() => handleDeleteClick(user)}
-                          className="bg-red-500 text-white p-2 rounded"
+                          className="bg-red-500 text-white px-4 py-2 rounded"
                         >
                           <FaTrash />
                         </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
+        </div>
+      )}
 
-          {isDeleting && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
-              <div className="bg-white p-4 rounded-lg shadow-lg max-w-sm w-full text-center">
-                <h3 className="text-xl">Are you sure you want to delete this user?</h3>
-                <div className="flex gap-4 mt-4">
-                  <button
-                    onClick={confirmDelete}
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                  >
-                    Yes, Delete
-                  </button>
-                  <button
-                    onClick={cancelDelete}
-                    className="bg-gray-500 text-white px-4 py-2 rounded"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </div>
+      {/* Deletion confirmation modal */}
+      {isDeleting && (
+        <div className="fixed inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-sm mx-auto">
+            <p className="text-xl font-semibold mb-4">Are you sure you want to delete this user?</p>
+            <div className="flex justify-between">
+              <button
+                onClick={confirmDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded"
+              >
+                Yes, Delete
+              </button>
+              <button
+                onClick={cancelDelete}
+                className="bg-gray-500 text-white px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
             </div>
-          )}
+          </div>
         </div>
       )}
     </div>
