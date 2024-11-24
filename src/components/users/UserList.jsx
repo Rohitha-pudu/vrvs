@@ -151,23 +151,23 @@ const UserList = () => {
         </form>
       ) : (
         <div>
-          <div className="flex justify-between items-center mb-4">
-            <div className="flex items-center gap-2">
+          <div className="flex flex-wrap justify-between items-center mb-4">
+            <div className="flex items-center gap-2 w-full sm:w-auto mb-4 sm:mb-0">
               <FaSearch />
               <input
                 type="text"
                 placeholder="Search by name or email"
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className="border border-gray-300 p-2 rounded w-80"
+                className="border border-gray-300 p-2 rounded w-full sm:w-80"
               />
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex gap-4 w-full sm:w-auto flex-wrap justify-between sm:justify-start">
               <select
                 value={selectedRole}
                 onChange={(e) => setSelectedRole(e.target.value)}
-                className="bg-gray-700 text-white border border-black p-2 rounded"
+                className="bg-gray-700 text-white border border-black p-2 rounded mb-2 sm:mb-0 w-full sm:w-auto"
               >
                 <option value="All">All Roles</option>
                 <option value="Admin">Admin</option>
@@ -177,7 +177,7 @@ const UserList = () => {
               <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
-                className="bg-gray-700 text-white border border-gray-300 p-2 rounded"
+                className="bg-gray-700 text-white border border-gray-300 p-2 rounded mb-2 sm:mb-0 w-full sm:w-auto"
               >
                 <option value="All">All Status</option>
                 <option value="Active">Active</option>
@@ -187,7 +187,7 @@ const UserList = () => {
               <select
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
-                className="bg-gray-700 text-white border border-gray-300 p-2 rounded"
+                className="bg-gray-700 text-white border border-gray-300 p-2 rounded mb-2 sm:mb-0 w-full sm:w-auto"
               >
                 <option value="name">Sort by Name</option>
                 <option value="role">Sort by Role</option>
@@ -198,7 +198,7 @@ const UserList = () => {
                 onClick={() =>
                   setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
                 }
-                className="border border-gray-300 p-2 rounded"
+                className="border border-gray-300 p-2 rounded w-full sm:w-auto"
               >
                 {sortOrder === 'asc' ? '↑' : '↓'}
               </button>
@@ -230,53 +230,55 @@ const UserList = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map((user) => {
-                  const lastActivity = new Date(user.lastActivity);
-                  const timeAgo = !isNaN(lastActivity.getTime())
-                    ? formatDistanceToNow(lastActivity)
-                    : 'N/A';
-
-                  return (
-                    <tr
-                      key={user.id}
-                      className="hover:bg-gradient-to-r from-blue-50 to-green-50"
-                    >
-                      <td className="border-b border-gray-300 px-4 py-2">{user.name}</td>
-                      <td className="border-b border-gray-300 px-4 py-2">{user.role}</td>
-                      <td className="border-b border-gray-300 px-4 py-2">{user.email}</td>
-                      <td className="border-b border-gray-300 px-4 py-2">{user.status}</td>
-                      <td className="border-b border-gray-300 px-4 py-2">{timeAgo}</td>
-                      <td className="border-b border-gray-300 px-4 py-2">
-                        <div className="flex gap-2">
-                          <button
-                            onClick={() => handleEditClick(user)}
-                            className="text-blue-500 hover:text-blue-700"
-                          >
-                            <FaEdit />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteClick(user)}
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            <FaTrash />
-                          </button>
-                        </div>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {filteredUsers.map((user) => (
+                  <tr key={user.id}>
+                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
+                      {user.name}
+                    </td>
+                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
+                      {user.role}
+                    </td>
+                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
+                      {user.email}
+                    </td>
+                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
+                      {user.status}
+                    </td>
+                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
+                      <div className="flex items-center gap-2">
+                        <FaClock />
+                        {formatDistanceToNow(new Date(user.lastActivity), {
+                          addSuffix: true,
+                        })}
+                      </div>
+                    </td>
+                    <td className="border-b border-gray-200 px-4 py-2 text-sm">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handleEditClick(user)}
+                          className="bg-blue-500 text-white p-2 rounded"
+                        >
+                          <FaEdit />
+                        </button>
+                        <button
+                          onClick={() => handleDeleteClick(user)}
+                          className="bg-red-500 text-white p-2 rounded"
+                        >
+                          <FaTrash />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
 
-          {isDeleting && userToDelete && (
-            <div className="fixed inset-0 bg-gray-700 bg-opacity-50 flex justify-center items-center z-50">
-              <div className="bg-white p-4 rounded-lg shadow-lg max-w-md mx-auto">
-                <h2 className="text-lg font-semibold text-gray-800">Confirm Deletion</h2>
-                <p className="text-gray-700">
-                  Are you sure you want to delete {userToDelete.name}?
-                </p>
-                <div className="mt-4 flex justify-between">
+          {isDeleting && (
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+              <div className="bg-white p-4 rounded-lg shadow-lg max-w-sm w-full text-center">
+                <h3 className="text-xl">Are you sure you want to delete this user?</h3>
+                <div className="flex gap-4 mt-4">
                   <button
                     onClick={confirmDelete}
                     className="bg-red-500 text-white px-4 py-2 rounded"
@@ -285,7 +287,7 @@ const UserList = () => {
                   </button>
                   <button
                     onClick={cancelDelete}
-                    className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
+                    className="bg-gray-500 text-white px-4 py-2 rounded"
                   >
                     Cancel
                   </button>
