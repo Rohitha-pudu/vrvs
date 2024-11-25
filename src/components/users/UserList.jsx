@@ -133,8 +133,8 @@ const UserList = () => {
               defaultValue={editingUser.status}
               className="border border-gray-300 p-2 rounded"
             >
-              <option value="Active">Invite Expired</option>
-              <option value="Inactive">Invite Pending</option>
+              <option value="Active">Active</option>
+              <option value="Inactive">Inactive</option>
             </select>
           </div>
           <div className="flex flex-col gap-2">
@@ -163,58 +163,56 @@ const UserList = () => {
         <div>
           <div className="flex flex-wrap justify-between items-center mb-4">
             <div className="flex items-center gap-2 w-full sm:w-auto mb-4 sm:mb-0">
-              <FaSearch />
+              <FaSearch/>
               <input
                 type="text"
                 placeholder="Search by name or email"
                 value={searchTerm}
                 onChange={handleSearchChange}
-                className="border border-gray-300 p-2 rounded w-full sm:w-80"
+                className="border-2 border-gray-300 p-2 rounded-md w-full sm:w-80 outline-none  focus:border-black focus:ring-black"
               />
             </div>
 
             <div className="flex gap-4 w-full sm:w-auto flex-wrap justify-between sm:justify-start">
-              <select
-                value={selectedRole}
-                onChange={(e) => setSelectedRole(e.target.value)}
-                className="bg-gray-700 text-white border border-black p-2 rounded mb-2 sm:mb-0 w-full sm:w-auto"
-              >
-                <option value="All">All Roles</option>
-                <option value="Admin">Admin</option>
-                <option value="Editor">Editor</option>
-                <option value="Viewer">Viewer</option>
-              </select>
+  <select
+    value={selectedRole}
+    onChange={(e) => setSelectedRole(e.target.value)}
+    className="bg-gray-700 text-white border border-black p-2 pr-8 rounded mb-2 sm:mb-0 w-full sm:w-auto appearance-none relative"
+  >
+    <option value="All">All Roles</option>
+    <option value="Admin">Admin</option>
+    <option value="Editor">Editor</option>
+    <option value="Viewer">Viewer</option>
+  </select>
 
-              <select
-                value={selectedStatus}
-                onChange={(e) => setSelectedStatus(e.target.value)}
-                className="bg-gray-700 text-white border border-gray-300 p-2 rounded mb-2 sm:mb-0 w-full sm:w-auto"
-              >
-                <option value="All">All Status</option>
-                <option value="Active">Invite Pending </option>
-                <option value="Inactive">Invite Expired</option>
-                <option value="Accepted">Invite Accepted</option>
-              </select>
+  <select
+    value={selectedStatus}
+    onChange={(e) => setSelectedStatus(e.target.value)}
+    className="bg-gray-700 text-white border border-gray-300 p-2 pr-8 rounded mb-2 sm:mb-0 w-full sm:w-auto appearance-none relative"
+  >
+    <option value="All">All Status</option>
+    <option value="Active">Active</option>
+    <option value="Inactive">Inactive</option>
+  </select>
 
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="bg-gray-700 text-white border border-gray-300 p-2 rounded mb-2 sm:mb-0 w-full sm:w-auto"
-              >
-                <option value="name">Sort by Name</option>
-                <option value="role">Sort by Role</option>
-                <option value="lastActivity">Sort by Last Activity</option>
-              </select>
+  <select
+    value={sortBy}
+    onChange={(e) => setSortBy(e.target.value)}
+    className="bg-gray-700 text-white border border-gray-300 p-2 pr-8 rounded mb-2 sm:mb-0 w-full sm:w-auto appearance-none relative"
+  >
+    <option value="name">Sort by Name</option>
+    <option value="role">Sort by Role</option>
+    <option value="lastActivity">Sort by Last Activity</option>
+  </select>
 
-              <button
-                onClick={() =>
-                  setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')
-                }
-                className="border border-gray-300 p-2 rounded w-full sm:w-auto"
-              >
-                {sortOrder === 'asc' ? '↑' : '↓'}
-              </button>
-            </div>
+  <button
+    onClick={() => setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc')}
+    className="border border-gray-300 bg-gray-700 hover:bg-transparent hover:text-black text-white p-2 rounded w-full sm:w-auto"
+  >
+    {sortOrder === 'asc' ? '↑' : '↓'}
+  </button>
+</div>
+
           </div>
 
           <div className="overflow-x-auto">
@@ -265,16 +263,14 @@ const UserList = () => {
                       <td className="border-b border-gray-200 px-4 py-2 text-sm">
                         <span
                           className={`inline-block w-2 h-6 rounded ${
-                            user.status === '' || user.status === 'Invite Pending'
+                              user.status === 'Inactive'
                               ? 'border-l-4 border-yellow-500'
-                              : user.status === 'Invite Expired'
-                              ? 'border-l-4 border-gray-500'
-                              : user.status === 'Invite Accepted'
+                              : user.status === 'Active' || user.status === '' 
                               ? 'border-l-4 border-green-500'
                               : ''
                           }`}
                         />
-                        {user.status?`${user.status}`:'Invite Pending'}
+                        {user.status?`${user.status}`:'Active'}
                       </td>
 
                       <td className="border-b border-gray-300 px-4 py-2">
@@ -285,15 +281,15 @@ const UserList = () => {
                       <td className="border-b border-gray-300 px-4 py-2">
                         <button
                           onClick={() => handleEditClick(user)}
-                          className="bg-green-500 text-white px-4 py-2 rounded mr-2"
+                          className="mr-2"
                         >
-                          <FaEdit />
+                          <FaEdit className='text-black-800'/>
                         </button>
                         <button
                           onClick={() => handleDeleteClick(user)}
-                          className="bg-red-500 text-white px-4 py-2 rounded"
+                          className=""
                         >
-                          <FaTrash />
+                          <FaTrash className='text-red-600'/>
                         </button>
                       </td>
                     </tr>

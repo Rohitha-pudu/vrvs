@@ -62,8 +62,8 @@ const RoleList = () => {
       </div>
   
       {/* Roles Table */}
-      <div className="overflow-x-auto mt-8"> 
-        <table className="min-w-full table-auto bg-white shadow-lg rounded-lg">
+      <div className="overflow-x-auto mt-8 "> 
+        <table className="min-w-full table-auto bg-white shadow-lg rounded-lg  ">
           <thead className="bg-gradient-to-r from-green-400 to-blue-500 text-white">
             <tr>
               <th className="border-b border-gray-200 p-4 text-left text-sm font-bold">Name</th>
@@ -107,7 +107,7 @@ const RoleList = () => {
                 id="name"
                 value={newRole.name}
                 onChange={(e) => setNewRole({ ...newRole, name: e.target.value })}
-                className="mt-1 block w-full border border-gray-300 rounded-lg shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+                className="mt-1 block w-full border-2 border-gray-300 rounded-lg shadow-sm p-2  text-black outline-none  focus:border-black focus:ring-black"
               />
             </div>
             <div>
@@ -120,7 +120,7 @@ const RoleList = () => {
                       id={permission}
                       checked={newRole.permissions.includes(permission)}
                       onChange={() => handlePermissionChange(permission)}
-                      className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                      className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
                     />
                     <label
                       htmlFor={permission}
@@ -136,7 +136,7 @@ const RoleList = () => {
                     id="other"
                     checked={isOtherSelected}
                     onChange={() => setIsOtherSelected(!isOtherSelected)}
-                    className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                    className="h-4 w-4 text-black focus:ring-black border-gray-300 rounded"
                   />
                   <label htmlFor="other" className="ml-2 text-sm font-medium text-gray-700">
                     Other
@@ -148,7 +148,7 @@ const RoleList = () => {
                     value={customPermission}
                     onChange={(e) => setCustomPermission(e.target.value)}
                     placeholder="Enter custom permission"
-                    className="mt-2 block w-full border border-gray-300 rounded-lg shadow-sm p-2 focus:ring-blue-500 focus:border-blue-500"
+                    className="mt-2 block w-full border-2 border-gray-300 rounded-lg shadow-sm p-2 outline-none  focus:border-black focus:ring-black"
                   />
                 )}
               </div>

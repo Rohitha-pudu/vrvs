@@ -90,7 +90,7 @@ const UserForm = ({ onClose, initialData }) => {
             name="name"
             value={formData.name}
             onChange={handleChange}
-            className={`w-full p-3 mt-2 border-2 rounded-lg focus:ring-blue-500 focus:border-blue-500 ${
+            className={`w-full p-3 mt-2 border-2 rounded-lg outline-none  focus:border-black focus:ring-black ${
               errors.name ? 'border-red-500' : 'border-gray-300'
             }`}
           />
@@ -107,7 +107,7 @@ const UserForm = ({ onClose, initialData }) => {
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className={`w-full p-3 mt-2 border-2 rounded-lg focus:ring-blue-500 focus:border-blue-500 ${
+            className={`w-full p-3 mt-2 border-2 rounded-lg outline-none  focus:border-black focus:ring-black ${
               errors.role ? 'border-red-500' : 'border-gray-300'
             }`}
           />
@@ -125,7 +125,7 @@ const UserForm = ({ onClose, initialData }) => {
             name="email"
             value={formData.email}
             onChange={handleChange}
-            className={`w-full p-3 mt-2 border-2 rounded-lg focus:ring-blue-500 focus:border-blue-500 ${
+            className={`w-full p-3 mt-2 border-2 rounded-lg outline-none  focus:border-black focus:ring-black ${
               errors.email ? 'border-red-500' : 'border-gray-300'
             }`}
           />
