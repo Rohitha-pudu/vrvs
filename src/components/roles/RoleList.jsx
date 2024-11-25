@@ -55,7 +55,7 @@ const RoleList = () => {
       <div className="absolute top-0 right-4">
         <button
           onClick={() => setIsAddRoleFormVisible(true)}
-          className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600 transition-all"
+          className="bg-green-500 text-white px-6 py-2 rounded-lg shadow hover:bg-green-600 transition-all border-2 border-transparent "
         >
           Add Role
         </button>
@@ -95,7 +95,7 @@ const RoleList = () => {
   
       {/* Role Form */}
       {isAddRoleFormVisible && (
-        <div className="mt-6 bg-white p-4 sm:p-6 rounded-lg shadow-lg">
+        <div className="mt-6 bg-white p-4 sm:p-6 rounded-lg shadow-lg border-2 transition-all  border-transparent animate-glow">
           <h2 className="text-xl font-semibold mb-4">Add New Role</h2>
           <div className="space-y-4">
             <div>

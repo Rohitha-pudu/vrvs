@@ -303,8 +303,8 @@ const UserList = () => {
 
       {/* Deletion confirmation modal */}
       {isDeleting && (
-            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50">
-              <div className="bg-white p-4 rounded-lg shadow-lg max-w-sm w-full text-center">
+            <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-30 z-50 transition-all border-2 border-transparent animate-glow">
+              <div className="bg-white p-4 rounded-lg shadow-lg max-w-sm w-full text-center ">
                 <h3 className="text-xl">Are you sure you want to delete this user?</h3>
                 <div className="flex  justify-between gap-4 mt-4">
               <button

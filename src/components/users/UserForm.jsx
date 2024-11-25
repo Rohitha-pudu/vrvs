@@ -75,7 +75,7 @@ const UserForm = ({ onClose, initialData }) => {
   };
 
   return (
-    <div className="p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto">
+    <div className="p-6 bg-white rounded-lg shadow-lg max-w-lg mx-auto transition-all border-2 border-transparent animate-glow">
       <h3 className="text-2xl font-semibold text-gray-800 mb-6">
         {formData.id ? 'Edit User' : 'Add User'}
       </h3>

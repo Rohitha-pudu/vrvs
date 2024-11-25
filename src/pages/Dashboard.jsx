@@ -20,7 +20,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto p-4 ">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
         {/* User List Section */}
         <div className="col-span-2 bg-white shadow-lg rounded-lg p-6 border border-gray-300 hover:shadow-xl transition-all duration-300">
@@ -40,7 +40,7 @@ const Dashboard = () => {
         </div>
 
         {/* Role Section */}
-        <div className="col-span-1 sm:col-span-2 lg:col-span-1 bg-white shadow-lg rounded-lg p-6 border border-gray-200 hover:shadow-xl transition-all duration-300">
+        <div className="col-span-1 sm:col-span-2 lg:col-span-1 bg-white shadow-lg rounded-lg p-6 border border-gray-200 hover:shadow-xl transition-all">
             <RoleList />
         </div>
       </div>

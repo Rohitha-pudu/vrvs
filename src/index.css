@@ -1,3 +1,23 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@keyframes glow-border {
+    0% {
+      border-color: #34d399;
+      box-shadow: 0 0 5px #34d399;
+    }
+    50% {
+      border-color: #3b82f6;
+      box-shadow: 0 0 5px #3b82f6;
+    }
+    100% {
+      border-color: #34d399;
+      box-shadow: 0 0 5px #34d399;
+    }
+  }
+  
+  .animate-glow {
+    animation: glow-border 5s infinite;
+  }
+  
