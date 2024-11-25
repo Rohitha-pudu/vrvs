@@ -63,9 +63,7 @@ The **Role and User Management System** enables administrators to manage users a
 ## **Technologies Used**
 
 - **React**: For building user interfaces.
-- **Context API**: For managing global state, particularly user and role data.
-- **Tailwind CSS**: For styling and creating a responsive design.
-- **React Icons**: For adding icons to buttons (e.g., edit, delete icons).
+- **Tailwind CSS**: For styling and creating a responsive design.=
 - **JavaScript (ES6+)**: Modern JavaScript features for a clean and efficient codebase.
 
 ---
